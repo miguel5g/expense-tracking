@@ -71,7 +71,7 @@ const ExpensesGraph: React.FC = () => {
       <h2 className="text-xl">Comparativo de despesas</h2>
 
       <ResponsiveContainer width="100%" height={320} className="mt-4">
-        <BarChart data={data}>
+        <BarChart data={data} margin={{ top: 0, right: 0, bottom: 0, left: 28 }}>
           <XAxis dataKey="name" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
           <YAxis
             stroke="#888888"
