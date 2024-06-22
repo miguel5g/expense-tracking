@@ -1,11 +1,13 @@
 'use client';
 
+import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ControllerRenderProps, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useMaskito } from '@maskito/react';
 import { PlusIcon } from 'lucide-react';
 
+import { useExpenses } from '@/stores/expenses';
 import { addExpenseSchema } from '@/schemas/add-expense';
 import { addCents, digitsFromString } from '@/libs/utils';
 import { formatters } from '@/libs/formatters';
@@ -41,6 +43,8 @@ import {
 
 const AddExpenseDialog: React.FC = () => {
   const dateInputRef = useMaskito({ options: dateMaskOptions });
+  const addExpense = useExpenses((store) => store.addExpense);
+  const [open, setOpen] = useState(false);
 
   const form = useForm<z.infer<typeof addExpenseSchema>>({
     resolver: zodResolver(addExpenseSchema),
@@ -53,7 +57,15 @@ const AddExpenseDialog: React.FC = () => {
   });
 
   function handleSubmit(values: z.infer<typeof addExpenseSchema>) {
-    console.log(values);
+    addExpense({
+      id: String(Date.now()),
+      description: values.description,
+      amount: +values.amount,
+      date: new Date(values.date),
+      category_id: values.category_id,
+    });
+    form.reset();
+    setOpen(false);
   }
 
   function handleAmountChange(
@@ -64,8 +76,13 @@ const AddExpenseDialog: React.FC = () => {
     field.onChange(formatters.currency(digits));
   }
 
+  function handleOpenChange(open: boolean) {
+    form.reset();
+    setOpen(open);
+  }
+
   return (
-    <Dialog onOpenChange={() => form.reset()}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <Button variant="link" className="px-0">
           <PlusIcon size={16} />

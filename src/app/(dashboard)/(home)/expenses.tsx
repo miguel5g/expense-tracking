@@ -1,9 +1,13 @@
+'use client';
+
+import { useExpenses } from '@/stores/expenses';
 import { AddExpenseDialog } from '@/components/dialogs/add-expense';
 import { Emoji } from '@/components/emoji';
+import { categories } from '@/libs/categories';
 
 interface ExpenseItemProps {
   expense: {
-    id: number;
+    id: string;
     description: string;
     amount: number;
     date: Date;
@@ -28,7 +32,9 @@ const ExpenseItem: React.FC<ExpenseItemProps> = ({ expense }) => {
       <div className="flex items-center flex-1 py-2 border-b">
         <div className="flex flex-col flex-1">
           <p>{expense.description}</p>
-          <p className="-mt-1 text-sm text-foreground/50">{expense.date.toLocaleDateString()}</p>
+          <p className="-mt-1 text-sm text-foreground/50">
+            {new Date(expense.date).toLocaleDateString()}
+          </p>
         </div>
 
         <span>
@@ -40,6 +46,8 @@ const ExpenseItem: React.FC<ExpenseItemProps> = ({ expense }) => {
 };
 
 const Expenses: React.FC = () => {
+  const expenses = useExpenses((store) => store.expenses);
+
   return (
     <section className="mt-8">
       {/* History */}
@@ -49,24 +57,18 @@ const Expenses: React.FC = () => {
       </div>
 
       <ul className="mt-4">
-        <ExpenseItem
-          expense={{
-            id: 1,
-            description: 'Coleira nova',
-            amount: 100,
-            date: new Date(),
-            category: { emoji: '🐶', name: 'Animais de estimação' },
-          }}
-        />
-        <ExpenseItem
-          expense={{
-            id: 2,
-            description: 'Conta de água',
-            amount: 34,
-            date: new Date(),
-            category: { emoji: '💧', name: 'Água' },
-          }}
-        />
+        {expenses.map((expense) => (
+          <ExpenseItem
+            key={expense.id}
+            expense={{
+              ...expense,
+              category: categories.find((c) => c.id === expense.category_id) || {
+                name: 'Sem categoria',
+                emoji: '🏠',
+              },
+            }}
+          />
+        ))}
       </ul>
     </section>
   );
