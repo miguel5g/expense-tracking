@@ -1,6 +1,9 @@
 'use client';
 
+import { useMemo } from 'react';
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from 'recharts';
+
+import { type Expense, useExpenses } from '@/stores/expenses';
 
 const data = [
   {
@@ -66,6 +69,58 @@ const data = [
 ];
 
 const ExpensesGraph: React.FC = () => {
+  const expenses = useExpenses((store) => store.expenses);
+
+  const data = useMemo(() => {
+    const grouped = expenses.reduce((acc, expense) => {
+      const month = new Date(expense.date).toLocaleString('pt-BR', {
+        month: '2-digit',
+        year: 'numeric',
+      });
+
+      if (!acc[month]) {
+        acc[month] = [];
+      }
+
+      acc[month].push(expense);
+
+      return acc;
+    }, {} as Record<string, Expense[]>);
+
+    const now = new Date();
+    return new Array(12)
+      .fill(0)
+      .map((_, index) => {
+        const month = new Date(now.getFullYear(), now.getMonth() - index, 1).toLocaleString(
+          'pt-BR',
+          { month: 'long' }
+        );
+        const actual = new Date(now.getFullYear(), now.getMonth() - index, 1).toLocaleString(
+          'pt-BR',
+          { month: '2-digit', year: 'numeric' }
+        );
+        const lastYear = new Date(now.getFullYear() - 1, now.getMonth() - index, 1).toLocaleString(
+          'pt-BR',
+          { month: '2-digit', year: 'numeric' }
+        );
+
+        return {
+          name: month,
+          totalKey: actual,
+          totalLastYearKey: lastYear,
+        };
+      })
+      .map(({ name, totalKey, totalLastYearKey }, index) => {
+        return {
+          name,
+          total: grouped[totalKey]?.reduce((acc, expense) => expense.amount + acc, 0) || 0,
+          totalLastYear:
+            grouped[totalLastYearKey]?.reduce((acc, expense) => expense.amount + acc, 0) || 0,
+        };
+      })
+      .reverse();
+  }, [expenses]);
+
   return (
     <section className="p-4 mt-16 -mx-4 rounded-lg bg-slate-100">
       <h2 className="text-xl">Comparativo de despesas</h2>
