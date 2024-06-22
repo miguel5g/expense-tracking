@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
-interface Expense {
+export interface Expense {
   id: string;
   description: string;
   amount: number;
