@@ -67,8 +67,7 @@ const data = [
 
 const ExpensesGraph: React.FC = () => {
   return (
-    <section className="mt-16">
-      {/* History graph */}
+    <section className="p-4 mt-16 -mx-4 rounded-lg bg-slate-100">
       <h2 className="text-xl">Comparativo de despesas</h2>
 
       <ResponsiveContainer width="100%" height={320} className="mt-4">
@@ -87,19 +86,24 @@ const ExpensesGraph: React.FC = () => {
             dataKey="totalLastYear"
             fill="currentColor"
             radius={[4, 4, 0, 0]}
-            className="fill-primary/50"
+            className="fill-indigo-300"
           />
-          <Bar dataKey="total" fill="currentColor" radius={[4, 4, 0, 0]} className="fill-primary" />
+          <Bar
+            dataKey="total"
+            fill="currentColor"
+            radius={[4, 4, 0, 0]}
+            className="fill-indigo-500"
+          />
         </BarChart>
       </ResponsiveContainer>
 
       <div className="flex items-center justify-center gap-4">
         <div className="inline-flex items-center gap-2">
-          <div className="w-8 h-4 rounded bg-primary/50" />
+          <div className="w-8 h-4 bg-indigo-300 rounded" />
           <span>Ano anterior</span>
         </div>
         <div className="inline-flex items-center gap-2">
-          <div className="w-8 h-4 rounded bg-primary" />
+          <div className="w-8 h-4 bg-indigo-500 rounded" />
           <span>Este ano</span>
         </div>
       </div>
