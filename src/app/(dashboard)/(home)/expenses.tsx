@@ -1,6 +1,5 @@
+import { AddExpenseDialog } from '@/components/dialogs/add-expense';
 import { Emoji } from '@/components/emoji';
-import { Button } from '@/components/ui/button';
-import { PlusIcon } from 'lucide-react';
 
 interface ExpenseItemProps {
   expense: {
@@ -19,7 +18,11 @@ const ExpenseItem: React.FC<ExpenseItemProps> = ({ expense }) => {
   return (
     <li className="flex items-center gap-6">
       <div className="flex items-center justify-center w-12 h-12 rounded-full bg-black/5">
-        <Emoji className="text-2xl select-none" symbol={expense.category.emoji} label={expense.category.name} />
+        <Emoji
+          className="text-2xl select-none"
+          symbol={expense.category.emoji}
+          label={expense.category.name}
+        />
       </div>
 
       <div className="flex items-center flex-1 py-2 border-b">
@@ -42,10 +45,7 @@ const Expenses: React.FC = () => {
       {/* History */}
       <div className="flex items-center justify-between">
         <h2 className="text-xl">Histórico de despesas</h2>
-        <Button variant="link" className='px-0' disabled>
-          <PlusIcon size={16} />
-          <span>Adicionar nova despesa</span>
-        </Button>
+        <AddExpenseDialog />
       </div>
 
       <ul className="mt-4">

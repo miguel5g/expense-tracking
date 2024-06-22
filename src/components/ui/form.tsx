@@ -22,6 +22,15 @@ type FormFieldContextValue<
   name: TName;
 };
 
+interface FormFieldGroupProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
+const FormFieldGroup: React.FC<FormFieldGroupProps> = ({ children, className }) => {
+  return <div className={cn('inline-flex gap-4 w-full', className)}>{children}</div>;
+};
+
 const FormFieldContext = React.createContext<FormFieldContextValue>({} as FormFieldContextValue);
 
 const FormField = <
@@ -72,7 +81,7 @@ const FormItem = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivEl
 
     return (
       <FormItemContext.Provider value={{ id }}>
-        <div ref={ref} className={cn('space-y-2', className)} {...props} />
+        <div ref={ref} className={cn('space-y-2 w-full', className)} {...props} />
       </FormItemContext.Provider>
     );
   }
@@ -118,7 +127,11 @@ const FormDescription = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLParagraphElement>
 >(({ className, ...props }, ref) => {
-  const { formDescriptionId } = useFormField();
+  const { error, formDescriptionId } = useFormField();
+
+  if (error) {
+    return null;
+  }
 
   return (
     <p
@@ -164,4 +177,5 @@ export {
   FormDescription,
   FormMessage,
   FormField,
+  FormFieldGroup,
 };
