@@ -5,69 +5,6 @@ import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from 'recharts';
 
 import { type Expense, useExpenses } from '@/stores/expenses';
 
-const data = [
-  {
-    name: 'Jan',
-    total: Math.floor(Math.random() * 5000) + 1000,
-    totalLastYear: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: 'Fev',
-    total: Math.floor(Math.random() * 5000) + 1000,
-    totalLastYear: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: 'Mar',
-    total: Math.floor(Math.random() * 5000) + 1000,
-    totalLastYear: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: 'Abr',
-    total: Math.floor(Math.random() * 5000) + 1000,
-    totalLastYear: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: 'Mai',
-    total: Math.floor(Math.random() * 5000) + 1000,
-    totalLastYear: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: 'Jun',
-    total: Math.floor(Math.random() * 5000) + 1000,
-    totalLastYear: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: 'Jul',
-    total: Math.floor(Math.random() * 5000) + 1000,
-    totalLastYear: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: 'Ago',
-    total: Math.floor(Math.random() * 5000) + 1000,
-    totalLastYear: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: 'Set',
-    total: Math.floor(Math.random() * 5000) + 1000,
-    totalLastYear: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: 'Out',
-    total: Math.floor(Math.random() * 5000) + 1000,
-    totalLastYear: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: 'Nov',
-    total: Math.floor(Math.random() * 5000) + 1000,
-    totalLastYear: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: 'Dez',
-    total: Math.floor(Math.random() * 5000) + 1000,
-    totalLastYear: Math.floor(Math.random() * 5000) + 1000,
-  },
-];
-
 const ExpensesGraph: React.FC = () => {
   const expenses = useExpenses((store) => store.expenses);
 
@@ -105,7 +42,7 @@ const ExpensesGraph: React.FC = () => {
         );
 
         return {
-          name: month,
+          name: month.slice(0, 3),
           totalKey: actual,
           totalLastYearKey: lastYear,
         };
@@ -122,7 +59,7 @@ const ExpensesGraph: React.FC = () => {
   }, [expenses]);
 
   return (
-    <section className="p-4 mt-16 -mx-4 rounded-lg bg-slate-100">
+    <section className="p-4 mt-16 rounded-lg md:-mx-4 bg-slate-100">
       <h2 className="text-xl">Comparativo de despesas</h2>
 
       <ResponsiveContainer width="100%" height={320} className="mt-4">

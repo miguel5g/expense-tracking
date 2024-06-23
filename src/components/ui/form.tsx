@@ -28,7 +28,7 @@ interface FormFieldGroupProps {
 }
 
 const FormFieldGroup: React.FC<FormFieldGroupProps> = ({ children, className }) => {
-  return <div className={cn('inline-flex gap-4 w-full', className)}>{children}</div>;
+  return <div className={cn('flex gap-4 w-full flex-col md:flex-row', className)}>{children}</div>;
 };
 
 const FormFieldContext = React.createContext<FormFieldContextValue>({} as FormFieldContextValue);

@@ -86,7 +86,8 @@ const AddExpenseDialog: React.FC = () => {
       <DialogTrigger asChild>
         <Button variant="link" className="px-0">
           <PlusIcon size={16} />
-          <span>Adicionar nova despesa</span>
+          <span className="md:hidden">Adicionar</span>
+          <span className="hidden md:block">Adicionar nova despesa</span>
         </Button>
       </DialogTrigger>
       <DialogContent>
