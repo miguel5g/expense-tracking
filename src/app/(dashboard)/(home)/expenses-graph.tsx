@@ -1,9 +1,35 @@
 'use client';
 
 import { useMemo } from 'react';
-import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from 'recharts';
+import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 import { type Expense, useExpenses } from '@/stores/expenses';
+import { cn } from '@/libs/utils';
+
+const KEY_MAP: Record<string, string> = {
+  total: 'Este ano',
+  totalLastYear: 'Ano passado',
+};
+
+const CustomTooltip = ({ active, payload, label }: any) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="flex flex-col gap-2 p-2 overflow-hidden text-xs rounded-md shadow bg-background text-foreground animate-in fade-in-0 zoom-in-95">
+        {(payload as any[]).map((item, index) => (
+          <div key={index} className="flex">
+            <div className={cn('w-8 h-4 rounded mr-2', item.className?.replace('fill', 'bg'))} />
+            <p>{KEY_MAP[item.dataKey]}:</p>
+            <p className="ml-1">
+              {(+item.value || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+            </p>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  return null;
+};
 
 const ExpensesGraph: React.FC = () => {
   const expenses = useExpenses((store) => store.expenses);
@@ -73,6 +99,11 @@ const ExpensesGraph: React.FC = () => {
             tickFormatter={(value) =>
               value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
             }
+          />
+          <Tooltip
+            content={<CustomTooltip />}
+            // @ts-ignore
+            cursor={{ className: 'fill-black/10', radius: [6, 6, 0, 0] }}
           />
           <Bar
             dataKey="totalLastYear"
